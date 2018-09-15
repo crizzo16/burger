@@ -2,41 +2,43 @@ let express = require("express");
 
 let router = express.Router();
 
-// Import the model (burger.js) to use its database functions.
+// Here's the burger-specific database functions
 let burger = require("../models/burger.js");
 
-// Create all our routes and set up logic within those routes where required.
+// Route time!
+// The route for the main page
 router.get("/", function(req, res) {
   burger.all(function(data) {
-    let hbsObject = {
+    let allBurgers = {
       burgers: data
     };
-    console.log(hbsObject);
-    res.render("index", hbsObject);
+    console.log(allBurgers);
+    res.render("index", allBurgers);
   });
 });
 
+// Posting a new burger - it better be a pun
 router.post("/api/burgers", function(req, res) {
   burger.create([
     "name", "eaten"
   ], [
-    req.body.name, false
+    req.body.name, false //When a new burger is added, it's automatically not eaten yet
   ], function(result) {
-    // Send back the ID of the new quote
     res.json({ id: result.insertId });
   });
 });
 
+// Update burger to now be eaten
 router.put("/api/burgers/:id", function(req, res) {
   let condition = "id = " + req.params.id;
 
-  console.log("condition", condition);
+  //console.log("condition", condition);
 
   burger.update({
     eaten: req.body.eaten
   }, condition, function(result) {
+    // If anything was changed 
     if (result.changedRows == 0) {
-      // If no rows were changed, then the ID must not exist, so 404
       return res.status(404).end();
     } else {
       res.status(200).end();
@@ -44,12 +46,12 @@ router.put("/api/burgers/:id", function(req, res) {
   });
 });
 
+// Bye bye burger
 router.delete("/api/burgers/:id", function(req, res) {
   let condition = "id = " + req.params.id;
 
   burger.delete(condition, function(result) {
     if (result.affectedRows == 0) {
-      // If no rows were changed, then the ID must not exist, so 404
       return res.status(404).end();
     } else {
       res.status(200).end();
@@ -57,5 +59,5 @@ router.delete("/api/burgers/:id", function(req, res) {
   });
 });
 
-// Export routes for server.js to use.
+// Export routes
 module.exports = router;

@@ -1,6 +1,7 @@
 // Set up MySQL connection.
 let mysql = require("mysql");
 
+// This is for Heroku
 if (process.env.JAWSDB_URL) {
   connection = mysql.createConnection(process.env.JAWSDB_URL);
 } else {
@@ -21,5 +22,4 @@ connection.connect(function(err) {
   console.log("connected as id " + connection.threadId);
 });
 
-// Export connection for our ORM to use.
 module.exports = connection;

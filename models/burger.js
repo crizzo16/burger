@@ -1,5 +1,6 @@
-// Import the ORM to create functions that will interact with the database.
+// Here's our ORM (Can't wait for Sequelize)
 let orm = require("../config/orm.js");
+
 
 let burger = {
   all: function(cb) {
@@ -7,7 +8,6 @@ let burger = {
       cb(res);
     });
   },
-  // The variables cols and vals are arrays.
   create: function(cols, vals, cb) {
     orm.create("burgers", cols, vals, function(res) {
       cb(res);
@@ -25,5 +25,5 @@ let burger = {
   }
 };
 
-// Export the database functions for the controller (burgersController.js).
+// Export these lovely functions
 module.exports = burger;
